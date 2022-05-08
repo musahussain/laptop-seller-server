@@ -55,7 +55,7 @@ async function run() {
             };
             const result = await userCollection.updateOne(filter, updatedDoc, options);
             res.send(result);
-        }); // put req
+        });
     }
     finally{
         console.log("connected");
