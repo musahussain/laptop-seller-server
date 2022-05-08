@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -24,6 +24,7 @@ async function run() {
         await client.connect();
         const productCollection = client.db('warehouse').collection('products');
 
+        // get products 
         app.get('/products', async(req, res) => {
             const query = {};
             const cursor = productCollection.find(query);
@@ -31,7 +32,30 @@ async function run() {
             const products = await cursor.toArray();
 
             res.send(products);
-        })
+        });
+
+        // get product by id 
+        app.get('/product/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const product = await productCollection.findOne(query);
+            res.send(product);
+        });
+
+        // update products quantity 
+        app.put('/inventory/:id', async(req, res) => {
+            const id = req.params.id;
+            const updatedQuantity = req.body;
+            const filter = {_id: ObjectId(id)};
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    quantity: updatedQuantity.quantity,
+                }
+            };
+            const result = await userCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        });
     }
     finally{
         console.log("connected");
