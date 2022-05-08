@@ -58,7 +58,7 @@ async function run() {
         });
     }
     finally{
-        console.log("connected")
+        console.log("connected");
     }
 }
 
