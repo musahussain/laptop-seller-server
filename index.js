@@ -65,7 +65,7 @@ async function run() {
 
 run().catch(console.dir);
 
-
+// root api 
 app.get('/', (req, res) => {
     res.send("Server is running");
 })
